@@ -27,6 +27,8 @@ class HEIC2PNG:
             pass                        # already open file
         else:
             self.image_file_path: Path = Path(image_file_path)
+            if self.image_file_path.suffix.lower() != '.heic':
+                raise ValueError("The provided file is not a HEIC image.")
         self.quality: Optional[int] = quality
         self.overwrite: bool = overwrite
 
