@@ -3,8 +3,9 @@ import traceback
 import argparse
 from pillow_heif import register_heif_opener
 
-from . import __version__
-from .heic2png import HEIC2PNG
+from heic2png import __version__
+from heic2png.heic2png import HEIC2PNG
+
 
 def cli(args):
     """
@@ -71,7 +72,7 @@ def main():
     eprint(f'HEIC2PNG v{__version__}')
 
     parser = argparse.ArgumentParser(description="Convert HEIC images to PNG.")
-    parser.add_argument("-i", "--input_path", required=True, help="Path to the input HEIC image.")
+    parser.add_argument("-i", "--input_path", help="Path to the input HEIC image.")
     parser.add_argument("-o", "--output_path", help="Path to save the converted PNG image.")
     parser.add_argument("-q", "--quality", type=int, help="Quality of the converted PNG image (1-100).")
     parser.add_argument("-w", "--overwrite", action="store_true", help="Overwrite the existing file if it already exists.")
