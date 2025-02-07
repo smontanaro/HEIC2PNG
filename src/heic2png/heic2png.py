@@ -1,3 +1,4 @@
+import os
 import sys
 import subprocess
 from pathlib import Path
@@ -20,7 +21,9 @@ class HEIC2PNG:
         :param overwrite: Whether to overwrite the file if it already exists.
         """
         if not image_file_path:
-            self.image_file_path = sys.stdin
+            stdin = (os.fdopen(sys.stdin.fileno(), "rb")
+                if "b" not in sys.stdin.mode else sys.stdin)
+            self.image_file_path = stdin
         # TODO: I'm not a Python type hints maven. The image_file_path type
         # needs to reflect that an open file object is also acceptable.
         elif hasattr("fileno", image_file_path):
@@ -46,14 +49,16 @@ class HEIC2PNG:
         :return: Path where the converted image is saved.
         """
         if not output_image_file_path:
-            output_path = sys.stdout
+            stdout = (os.fdopen(sys.stdout.fileno(), "wb")
+                if "b" not in sys.stdout.mode else sys.stdout)
+            output_path = stdout
         else:
             output_path: Path = Path(output_image_file_path)
 
-        # TODO: Since this now accepts an open file object, an explicit output
-        # file format should be supported, but I don't know if the file
-        # extension is sufficient to pass as the optional format parameter.
-        self.image.save(output_path)
+        # TODO: Not sure this is correct, there's probably a better mapping
+        # between image file extensions and file formats. For example, see the
+        # output of `python -m PIL`.
+        self.image.save(output_path, format=extension.replace(".", "").upper())
 
         # TODO: Skip this step if the output format isn't PNG or pngquant can't
         # be found?
