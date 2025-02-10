@@ -66,8 +66,5 @@ def test_stdin_stdout():
         sys.stdin, sys.stdout = save_stdin, save_stdout
         with (open(inputfile, "rb") as inp,
               open(outputfile, "rb") as outp):
-            # I don't really know how to compare images. If we assume that PIL
-            # does its thing properly, and PNG files will always be larger than
-            # their corresponding HEIC files, hopefully that's good enough.
             assert len(outp.read()) > len(inp.read())
         os.unlink(outputfile)
