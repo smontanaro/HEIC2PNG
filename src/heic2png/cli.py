@@ -7,6 +7,10 @@ from heic2png import __version__
 from heic2png.heic2png import HEIC2PNG
 
 
+def eprint(*args, file=sys.stderr, **kwds):
+    "print to stderr by default"
+    print(*args, file=file, **kwds)
+
 def cli(args):
     """
     Command Line Interface for converting HEIC images to PNG.
@@ -58,9 +62,6 @@ def cli(args):
         eprint('Please report this issue with the full traceback.')
         eprint('-> https://github.com/NatLee/HEIC2PNG/issues')
 
-def eprint(*args, file=sys.stderr, **kwds):
-    "print to stderr by default"
-    print(*args, file=file, **kwds)
 
 
 def main():
@@ -71,7 +72,11 @@ def main():
 
     eprint(f'HEIC2PNG v{__version__}')
 
-    parser = argparse.ArgumentParser(description="Convert HEIC images to PNG.")
+    parser = argparse.ArgumentParser(description="Convert HEIC images to PNG.",
+        epilog="""
+In the absence of an input (-i) file, input is read from sys.stdin.
+In the absence of an output (-o) file, output is written to sys.stdout.
+""")
     parser.add_argument("-i", "--input_path", help="Path to the input HEIC image.")
     parser.add_argument("-o", "--output_path", help="Path to save the converted PNG image.")
     parser.add_argument("-q", "--quality", type=int, help="Quality of the converted PNG image (1-100).")
